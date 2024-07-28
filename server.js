@@ -6,7 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Configure Airtable
 Airtable.configure({
@@ -20,6 +20,11 @@ app.use(cors());
 // Serve static files from 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve kodan.html explicitly
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'kodan.html'));
+});
+
 // Use body-parser to parse JSON bodies
 app.use(bodyParser.json());
 
@@ -28,6 +33,7 @@ app.post('/api/airtable', async (req, res) => {
     const { email } = req.body;
     console.log('Received email:', email); // Debugging statement
     try {
+        console.log('Creating record in Airtable...');
         const records = await base(process.env.AIRTABLE_TABLE_NAME).create([
             {
                 fields: {
@@ -35,6 +41,7 @@ app.post('/api/airtable', async (req, res) => {
                 },
             },
         ]);
+        console.log('Record created:', records);
         res.status(200).json({ message: 'Success', records });
     } catch (error) {
         console.error('Error creating record:', error);
