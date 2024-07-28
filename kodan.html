@@ -76,7 +76,31 @@ body, html {
     margin-bottom: -2vh;
     transition: color 0.3s ease;
 }
+#email-signup {
+    margin-top: 50px; /* Adjust this value as needed to create enough space between the elements */
+}
 
+@media (max-width: 600px) {
+        #waitlist-header {
+            margin-top: 290px;
+        }
+    }
+@media (max-width: 600px) {
+    #signup-form {
+        text-align: right;
+    }
+
+    #signup-button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem;
+        margin-left: 20px; /* Adjust this value as needed */
+    }
+}
 .content-section {
     opacity: 1;
     transition: opacity 1s ease;
@@ -110,6 +134,7 @@ p, li {
     font-size: 1rem;
     width: 300px;
 }
+
 
 #signup-button, #discord-button {
     padding: 0.5rem 1rem;
@@ -323,7 +348,12 @@ footer {
                     </div>
         </div>
         <div id="email-signup" class="content-section">
-            <h2>Join the waitlist</h2>
+            <h2 id="waitlist-header">Join the waitlist</h2>
+
+
+
+
+
             <form id="signup-form">
                 <input type="email" id="email-input" placeholder="Enter your email" required>
                 <button type="submit" id="signup-button">Sign Up</button>
@@ -335,6 +365,7 @@ footer {
 
 
     <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
             const signupForm = document.getElementById('signup-form');
             const emailInput = document.getElementById('email-input');
@@ -465,6 +496,7 @@ footer {
             // Initialize everything
             initGifCarousel();
             updateHeaderAndBackground();
+            
         });
 
     </script>
