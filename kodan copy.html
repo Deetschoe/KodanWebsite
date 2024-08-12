@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+    <link rel="apple-touch-icon" sizes="180x180" href="/public/favicon_io/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/public/favicon_io/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/public/favicon_io/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kōdan</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Helvetica:wght@700&display=swap');
+
+body, html {
+    margin: 0;
+    padding: 0;
+    scroll-snap-type: y mandatory;
+    overflow-y: scroll;
+
+    font-family: 'Helvetica', sans-serif;
+    font-weight: 700;
+    background-color: black;
+    color: white;
+    overflow-x: hidden;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.header-container {
+    display: flex;
+    padding-top: 570px; /* Adjust as needed */
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.kodan-description {
+    flex: 1;
+}
+
+#email-signup {
+    flex: 1;
+    text-align: right;
+}
+
+#email-input {
+    width: 200px;
+    margin-right: 10px;
+}
+
+
+.icon:first-child {
+    margin-left: 0;
+}
+
+.subtitle {
+    font-weight: 300; /* Lighter weight */
+    opacity: 0.7; /* Slightly lighter color */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-top: 5rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 2rem;
+
+
+
+}
+
+#kodan-header {
+    font-size: 6rem;
+    margin-top: -20px;
+    margin-top: 0vh;
+    margin-bottom: -2vh;
+    transition: color 0.3s ease;
+}
+#email-signup {
+    margin-top: 50px; /* Adjust this value as needed to create enough space between the elements */
+}
+
+@media (max-width: 600px) {
+        #waitlist-header {
+            margin-top: 290px;
+        }
+    }
+@media (max-width: 600px) {
+    #signup-form {
+        text-align: right;
+    }
+
+    #signup-button {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        background-color: #fff;
+        color: #000;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem;
+        margin-left: 20px; /* Adjust this value as needed */
+    }
+}
+.content-section {
+    opacity: 1;
+    transition: opacity 1s ease;
+    margin-bottom: 20vh;
+    margin-right: 10vh;
+    margin-left: 10vh;
+
+
+}
+
+h2 {
+    font-size: 2.5rem;
+    margin-top: 3rem;
+}
+
+p, li {
+    font-size: 1.2rem;
+    line-height: 1.6;
+}
+
+.mission-point {
+    margin-top: -20px;
+    margin-bottom: 1rem;
+    font-weight: 10; /* Lighter weight */
+
+}
+
+
+#email-input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    width: 300px;
+}
+
+
+#signup-button, #discord-button {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+#discord-button {
+    display: none;
+}
+.snap-section {
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+      
+#gif-carousel {
+    width: 100vw;
+    height: 540px;
+    overflow: visible;
+    left: 35%;
+    position: relative;
+    margin: 50px 0;
+    transform: translateX(-50%);
+}
+
+#gif-carousel-inner {
+    display: flex;
+    height: 100%;
+    transition: transform 0.1s ease;
+    position: absolute;
+}
+
+.gif-slide {
+    flex: 0 0 304px;
+    height: 540px;
+    background-size: cover;
+    background-position: center;
+}
+#social-icons .icon {
+    width: 44%;
+    height: 44%;
+    margin-right: 5px; /* Adjust the margin as needed */
+}
+
+#social-icons .icon:last-child {
+    margin-right: 0; /* Remove margin from the last icon */
+}
+
+#social-icons {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.social-icons-container {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.social-icons-container .icon {
+    margin-left: 10px; /* Adjust margin as needed */
+    width: 25px; /* Adjust size as needed */
+    height: 25px; /* Adjust size as needed */
+}
+
+.social-icons-container .icon:first-child {
+    margin-left: 0; /* Remove margin from the first icon */
+}
+.icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+#real-site-text {
+    font-size: 0.8rem;
+    margin-right: 20px;
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: none;
+}
+
+/* New and replaced styles */
+.features-container {
+    display: flex;
+    margin-top: -55px;
+    justify-content: space-between;
+    width: 100vw;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    padding: 20px 0;
+}
+
+.feature-column {
+    flex: 1;
+    margin: 0 10px;
+    border: 2px solid #333;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.feature-column h2 {
+    margin-top: 0;
+}
+
+.feature-description {
+    display: none;
+    margin-top: 10px;
+}
+
+.kodan-signup-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.kodan-description {
+    flex: 1;
+}
+
+#email-signup {
+    flex: 1;
+    margin-top: -24.5vh;
+
+    text-align: right;
+}
+
+#email-input {
+    width: 200px;
+    margin-right: 10px;
+}
+
+    </style>
+</head>
+<body>
+  
+    <div class="container">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h1 id="kodan-header">Kōdan</h1> 
+            <a href="https://www.youtube.com/watch?v=GOybZ50DnO4" target="_blank">
+                <img src="https://i.ibb.co/F4csyh3/png.png" alt="Logo" style="width: 50px; margin-left: 20px;"> 
+            </a>        </div>
+
+        <p class="subtitle">videos fast af.</p>
+        
+
+        <section class="snap-section">
+            <div id="gif-carousel">
+                <div id="gif-carousel-inner"></div>
+            </div>
+            
+        </section>
+
+
+
+        <!-- <div class="features-container">
+            <div class="feature-column" onclick="toggleDescription(this)">
+                <h2>How?</h2>
+                <div class="feature-description">
+                    <strong>Upload your videos and type how you want it.</strong>
+                </div>
+            </div>
+            <div class="feature-column" onclick="toggleDescription(this)">
+                <h2>Don't have videos?</h2>
+                <div class="feature-description">
+                    <strong>Come up with a idea and we generate you the video.</strong>
+                </div>
+            </div>
+            <div class="feature-column" onclick="toggleDescription(this)">
+                <h2>Feeling alone?</h2>
+                <div class="feature-description">
+                    <strong>Share your projects with friends and have them add to it.</strong>
+                </div>
+            </div>
+        </div> -->
+        
+        <div class="kodan-signup-container">
+            <div class="kodan-description">
+                <h2>Kōdan</h2>
+                <div class="mission-point">
+                    <p class="subtitle" style="opacity: 0.7;">fast, collaborative, and open source.</p>
+                    <div class="social-icons-container">
+                        <a href="https://www.instagram.com/kodan.app" target="_blank">
+                            <img src="https://cloud-3uguxjzvw-hack-club-bot.vercel.app/1instagram.svg" alt="Instagram" class="icon">
+                        </a>
+                        <a href="https://discord.gg/qV3YAVTDj5" target="_blank">
+                            <img src="https://cloud-3uguxjzvw-hack-club-bot.vercel.app/0discord.svg" alt="Discord" class="icon">
+                        </a>
+                    </div>
+        </div>
+        <div id="email-signup" class="content-section">
+            <h2 id="waitlist-header">Join the waitlist</h2>
+
+
+
+
+
+            <form id="signup-form">
+                <input type="email" id="email-input" placeholder="Enter your email" required>
+                <button type="submit" id="signup-button">Sign Up</button>
+            </form>
+            <button id="discord-button">Join our Discord</button>
+        </div>
+            </div>
+        </div>
+
+
+    <script>
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const signupForm = document.getElementById('signup-form');
+            const emailInput = document.getElementById('email-input');
+            const emailSignup = document.getElementById('email-signup');
+
+            signupForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const email = emailInput.value;
+                const response = await fetch('/api/airtable', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email }),
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    emailSignup.innerHTML = '<p>check your email</p>';
+                } else {
+                    alert('Failed to submit email. ' + result.error);
+                }
+            });
+
+            function toggleDescription(element) {
+                const description = element.querySelector('.feature-description');
+                const allDescriptions = document.querySelectorAll('.feature-description');
+                
+                // Hide all descriptions
+                allDescriptions.forEach(desc => desc.style.display = 'none');
+                
+                // Show the clicked description
+                if (description.style.display === 'none' || description.style.display === '') {
+                    description.style.display = 'block';
+                    // Play sound effect
+                    const audio = new Audio('path/to/your/sound/effect.mp3');
+                    audio.play();
+                } else {
+                    description.style.display = 'none';
+                }
+            }
+
+            const signupButton = document.getElementById('signup-button');
+            const discordButton = document.getElementById('discord-button');
+            const kodanHeader = document.getElementById('kodan-header');
+            const contentSections = document.querySelectorAll('.content-section');
+            const socialIcons = document.querySelector('.social-icons-container'); // Changed to querySelector
+            const gifCarouselInner = document.getElementById('gif-carousel-inner');
+
+            // GIF URLs (replace with your actual GIF URLs)
+            const gifUrls = [
+                'https://i.gifer.com/origin/04/040f8202c0af3f5e119c33b0d8d57c73_w200.gif',
+                'https://i.pinimg.com/originals/e1/77/3b/e1773b8099589bc22d845f88bc5a00e2.gif',
+               'https://cloud-d5q9ya4xl-hack-club-bot.vercel.app/033__1_.gif',
+               'https://cloud-d5q9ya4xl-hack-club-bot.vercel.app/133_copy__1_.gif',
+               'https://cloud-d5q9ya4xl-hack-club-bot.vercel.app/2111__1_.gif',
+               'https://cloud-d5q9ya4xl-hack-club-bot.vercel.app/3222__1_.gif',
+               'https://cloud-d5q9ya4xl-hack-club-bot.vercel.app/4gif__1_.gif'
+            ];
+
+            function initGifCarousel() {
+            gifUrls.forEach((url, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'gif-slide';
+                slide.style.backgroundImage = `url(${url})`;
+                gifCarouselInner.appendChild(slide);
+            });
+            // Double the GIFs to create a seamless loop
+            gifUrls.forEach((url, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'gif-slide';
+                slide.style.backgroundImage = `url(${url})`;
+                gifCarouselInner.appendChild(slide);
+            });
+            gifCarouselInner.style.width = `${gifUrls.length * 200}%`; // Adjust width based on number of GIFs
+        }
+
+            let lastScrollTop = 0;
+            let gifScrollPosition = 0;
+
+            function updateGifPosition() {
+                const st = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollDelta = st - lastScrollTop;
+                
+                // Adjust this value to control scroll speed
+                const scrollSpeed = 1.9;
+                
+                gifScrollPosition += scrollDelta * scrollSpeed;
+                
+                const maxScroll = gifCarouselInner.scrollWidth / 2; // Half because we doubled the GIFs
+                
+                if (gifScrollPosition > maxScroll) {
+                    gifScrollPosition -= maxScroll;
+                } else if (gifScrollPosition < 0) {
+                    gifScrollPosition += maxScroll;
+                }
+
+                gifCarouselInner.style.transform = `translateX(-${gifScrollPosition}px)`;
+                lastScrollTop = st <= 0 ? 0 : st;
+            }
+
+            function updateHeaderAndBackground() {
+                const scrollPosition = window.scrollY;
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrollPercentage = Math.min(scrollPosition / (documentHeight - windowHeight), 1);
+
+                // Update background color (black to white)
+                const colorValue = Math.round(255 * scrollPercentage);
+                const backgroundColor = `rgb(${colorValue}, ${colorValue}, ${colorValue})`;
+                document.body.style.backgroundColor = backgroundColor;
+
+                // Update text color (white to black)
+                const textColor = scrollPercentage > 0.5 ? 'black' : 'white';
+                document.body.style.color = textColor;
+                kodanHeader.style.color = textColor;
+
+                // Fade in social icons
+                if (socialIcons) {
+                    socialIcons.style.opacity = Math.min(scrollPercentage * 2, 1);
+                }
+
+                updateGifPosition();
+            }
+
+            window.addEventListener('scroll', updateHeaderAndBackground);
+            window.addEventListener('resize', updateHeaderAndBackground);
+
+            // Initialize everything
+            initGifCarousel();
+            updateHeaderAndBackground();
+            
+        });
+
+    </script>
+</body>
+</html>
