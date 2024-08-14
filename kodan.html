@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jōin Kōdan</title>
+    <title>Kōdan</title>
+    <link rel="icon" href="./public/favicon_io/favicon-32x32.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/favicon-16x16.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/apple-touch-icon.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/android-chrome-192x192.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/android-chrome-512x512.png" type="image/x-icon">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
@@ -18,7 +19,7 @@
             align-items: center;
             justify-content: center;
             background-color: #827EE4;
-            transition: background-color 1s ease;
+            transition: background-color 7s ease;
             overflow: hidden;
         }
 
@@ -33,7 +34,8 @@
             width: 80px;
             animation: rotate 25s linear infinite;
             opacity: 0;
-            transition: opacity 0.1s ease;
+            transition: opacity 1s ease;
+            margin: 0 auto;
         }
 
         @keyframes rotate {
@@ -42,99 +44,107 @@
         }
 
         h1 {
-            color: #827EE4;
+            color: #FFFFFF;
             margin-top: 20px;
             font-size: 2.5rem;
+            transition: color 1s ease;
         }
 
-        #email-form {
+        #email-form, #story-form {
             margin-top: 30px;
-            margin-right: 28px;
             position: relative;
+            opacity: 0;
+            transition: opacity 1s ease;
         }
 
-        #email-input {
+        #email-input, #story-input {
             width: 100%;
             max-width: 300px;
             padding: 10px;
-            border: 2px solid #827EE4;
+            border: 2px solid #FFFFFF;
             border-radius: 10px;
             background-color: transparent;
-            color: #827EE4;
+            color: #FFFFFF;
             text-align: center;
             font-size: 1rem;
+            transition: color 1s ease, border-color 1s ease;
         }
 
-        #email-input::placeholder {
+    
+        
+
+        #email-input::placeholder, #story-input::placeholder {
             color: #A6A3F1;
-        }
-
-        #submit-hint {
-            color: #827EE4;
-            margin-top: 10px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            cursor: pointer;
-            margin-left: 20px;
-
+            transition: color 1s ease;
         }
 
         #thank-you {
-            color: #827EE4;
+            color: #FFFFFF;
             margin-top: 20px;
             opacity: 0;
-            transition: color 4s ease, opacity 0.3s ease;
+            transition: opacity 1s ease;
             font-size: 1.2rem;
-        }
-
-        #full-screen-gif {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            display: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <img src="./transparent.png" alt="Kodan Logo" class="logo" id="logo">
-        <h1>anyone can create</h1>
+        <img src="./ultrawhi.png" alt="Kodan Logo White" class="logo" id="logo-white" style="display: none;">
+        <h1 id="main-heading">anyone can create</h1>
         <form id="email-form">
             <input type="email" id="email-input" placeholder="deet@kodan.app" required>
-            <p id="submit-hint">click to submit</p>
         </form>
-        <p id="thank-you">stay tuned for an invite link to our beta</p>
+        <form id="story-form" style="display: none;">
+            <input type="text" id="story-input" placeholder="what's your story?" required>
+        </form>
+        <p id="thank-you">check your inbox later today for your first episode</p>
     </div>
-    <img id="full-screen-gif" src="https://i.ibb.co/0CjhsBQ/gif.gif" alt="Full Screen GIF">
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;
+            const mainHeading = document.getElementById('main-heading');
             const emailInput = document.getElementById('email-input');
-            const submitHint = document.getElementById('submit-hint');
-            const thankYou = document.getElementById('thank-you');
+            const storyInput = document.getElementById('story-input');
             const emailForm = document.getElementById('email-form');
+            const storyForm = document.getElementById('story-form');
+            const thankYou = document.getElementById('thank-you');
             const logo = document.getElementById('logo');
-            const fullScreenGif = document.getElementById('full-screen-gif');
+            const logoWhite = document.getElementById('logo-white');
 
-            // Fade in background and logo
-            setTimeout(() => {
-                body.style.backgroundColor = 'white';
-                logo.style.opacity = '1';
-            }, 100);
+            function fadeIn(element, duration = 1000) {
+                setTimeout(() => {
+                    element.style.transition = `opacity ${duration}ms ease`;
+                    element.style.opacity = '1';
+                }, 100);
+            }
 
-            // Show submit hint when valid email is entered
-            emailInput.addEventListener('input', function() {
-                if (this.checkValidity()) {
-                    submitHint.style.opacity = '1';
-                } else {
-                    submitHint.style.opacity = '0';
-                }
-            });
+            function fadeOut(element, duration = 1000) {
+                element.style.transition = `opacity ${duration}ms ease`;
+                element.style.opacity = '0';
+            }
 
-            // Handle form submission
+            function switchToStoryInput() {
+                fadeOut(emailForm);
+                fadeOut(mainHeading);
+                fadeOut(logo);
+
+                setTimeout(() => {
+                    body.style.backgroundColor = '#827EE4';
+                    mainHeading.textContent = "what's your story?";
+                    mainHeading.style.color = '#FFFFFF';  // Set the text color to white
+                    emailForm.style.display = 'none';
+                    storyForm.style.display = 'block';
+                    logo.style.display = 'none';
+                    logoWhite.style.display = 'block';
+                    
+                    fadeIn(mainHeading, 7000);
+                    fadeIn(storyForm, 7000);
+                    fadeIn(logoWhite, 7000);
+                }, 1000);
+            }
+
             function submitEmail() {
                 const email = emailInput.value;
 
@@ -148,28 +158,7 @@
                 .then(response => response.json())
                 .then(result => {
                     if (result.message === 'Success') {
-                        // Fade out everything except "see you soon"
-                        logo.style.opacity = '0';
-                        emailForm.style.opacity = '0';
-                        document.querySelector('h1').style.opacity = '0';
-
-                        // Fade in "see you soon"
-                        thankYou.style.opacity = '1';
-
-                        // Start color transition of "see you soon"
-                        setTimeout(() => {
-                            thankYou.style.color = 'white';
-                        }, 100);
-
-                        // Show GIF after 2 seconds
-                        setTimeout(() => {
-                            fullScreenGif.style.display = 'block';
-                        }, 5000);
-
-                        // Redirect after 6 seconds (2 seconds wait + 4 seconds GIF display)
-                        setTimeout(() => {
-                            window.location.href = 'https://x.com/kodanapp';
-                        }, 6000);
+                        switchToStoryInput();
                     } else {
                         throw new Error(result.error || 'Failed to submit email');
                     }
@@ -180,18 +169,72 @@
                 });
             }
 
+            function submitStory() {
+                const story = storyInput.value;
+
+                fetch('/api/airtable', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ story }),
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.message === 'Success') {
+                        fadeOut(storyForm);
+                        fadeOut(mainHeading);
+                        fadeOut(logoWhite);
+
+                        setTimeout(() => {
+                            fadeIn(thankYou, 1000);
+                        }, 1000);
+
+                        setTimeout(() => {
+                            window.location.href = 'https://twitter.com/kodanapp';
+                        }, 7000);
+                    } else {
+                        throw new Error(result.error || 'Failed to submit story');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to submit story. ' + error.message);
+                });
+            }
+
+            // Initial setup
+            setTimeout(() => {
+                body.style.backgroundColor = '#FFFFFF';
+                mainHeading.style.color = '#827EE4';
+                emailInput.style.color = '#827EE4';
+                emailInput.style.borderColor = '#827EE4';
+                emailInput.style.setProperty('--placeholder-color', '#A6A3F1');
+                fadeIn(logo);
+                fadeIn(emailForm);
+            }, 100);
+
             emailForm.addEventListener('submit', function(e) {
                 e.preventDefault();
                 submitEmail();
             });
 
-            submitHint.addEventListener('click', submitEmail);
+            storyForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitStory();
+            });
 
-            // Allow enter key to submit
             emailInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     e.preventDefault();
                     submitEmail();
+                }
+            });
+
+            storyInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    submitStory();
                 }
             });
         });

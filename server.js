@@ -28,24 +28,31 @@ app.get('/', (req, res) => {
 // Use body-parser to parse JSON bodies
 app.use(bodyParser.json());
 
-// Endpoint to handle Airtable form submissions
 app.post('/api/airtable', async (req, res) => {
-    const { email } = req.body;
-    console.log('Received email:', email); // Debugging statement
     try {
-        console.log('Creating record in Airtable...');
-        const records = await base(process.env.AIRTABLE_TABLE_NAME).create([
-            {
-                fields: {
-                    Emails: email, // Ensure this matches the field name in Airtable
-                },
-            },
-        ]);
-        console.log('Record created:', records);
-        res.status(200).json({ message: 'Success', records });
+        const { email, story } = req.body;
+        let record;
+
+        if (email) {
+            // Handle email submission
+            record = await base('Emails').create({
+                "Emails": email
+            });
+            console.log('Email record created:', record);
+        } else if (story) {
+            // Handle story submission
+            record = await base('Emails').create({
+                "story": story
+            });
+            console.log('Story record created:', record);
+        } else {
+            throw new Error('Invalid submission: neither email nor story provided');
+        }
+
+        res.json({ message: 'Success', id: record.id });
     } catch (error) {
         console.error('Error creating record:', error);
-        res.status(500).json({ message: 'Error', error: error.message });
+        res.status(500).json({ error: error.message });
     }
 });
 
