@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script defer data-domain="kodan.app" src="https://plausible.io/js/script.js"></script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kōdan</title>
-    <link rel="icon" href="./public/favicon_io/favicon-32x32.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/favicon-16x16.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/apple-touch-icon.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/android-chrome-192x192.png" type="image/x-icon"> <link rel="icon" href="./public/favicon_io/android-chrome-512x512.png" type="image/x-icon">
+    <link rel="icon" href="./favicon_io/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="./favicon_io/site.webmanifest">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
 
@@ -44,10 +50,11 @@
         }
 
         h1 {
-            color: #FFFFFF;
+            color: #827EE4;
             margin-top: 20px;
             font-size: 2.5rem;
-            transition: color 1s ease;
+            transition: color 1s ease, opacity 1s ease;
+            opacity: 0;
         }
 
         #email-form, #story-form {
@@ -70,9 +77,6 @@
             transition: color 1s ease, border-color 1s ease;
         }
 
-    
-        
-
         #email-input::placeholder, #story-input::placeholder {
             color: #A6A3F1;
             transition: color 1s ease;
@@ -85,6 +89,16 @@
             transition: opacity 1s ease;
             font-size: 1.2rem;
         }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
     </style>
 </head>
 <body>
@@ -96,7 +110,7 @@
             <input type="email" id="email-input" placeholder="deet@kodan.app" required>
         </form>
         <form id="story-form" style="display: none;">
-            <input type="text" id="story-input" placeholder="what's your story?" required>
+            <input type="text" id="story-input" placeholder="a cat learns to speak english" required>
         </form>
         <p id="thank-you">check your inbox later today for your first episode</p>
     </div>
@@ -133,7 +147,7 @@
                 setTimeout(() => {
                     body.style.backgroundColor = '#827EE4';
                     mainHeading.textContent = "what's your story?";
-                    mainHeading.style.color = '#FFFFFF';  // Set the text color to white
+                    mainHeading.style.color = '#FFFFFF';
                     emailForm.style.display = 'none';
                     storyForm.style.display = 'block';
                     logo.style.display = 'none';
@@ -145,8 +159,25 @@
                 }, 1000);
             }
 
+            function validateEmail(email) {
+                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(String(email).toLowerCase());
+            }
+
+            function shakeElement(element) {
+                element.classList.add('shake');
+                setTimeout(() => {
+                    element.classList.remove('shake');
+                }, 500);
+            }
+
             function submitEmail() {
                 const email = emailInput.value;
+
+                if (!validateEmail(email)) {
+                    shakeElement(emailInput);
+                    return;
+                }
 
                 fetch('/api/airtable', {
                     method: 'POST',
@@ -206,12 +237,12 @@
             // Initial setup
             setTimeout(() => {
                 body.style.backgroundColor = '#FFFFFF';
-                mainHeading.style.color = '#827EE4';
                 emailInput.style.color = '#827EE4';
                 emailInput.style.borderColor = '#827EE4';
                 emailInput.style.setProperty('--placeholder-color', '#A6A3F1');
                 fadeIn(logo);
                 fadeIn(emailForm);
+                fadeIn(mainHeading);
             }, 100);
 
             emailForm.addEventListener('submit', function(e) {
