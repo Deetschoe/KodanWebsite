@@ -31,23 +31,25 @@ app.use(bodyParser.json());
 app.post('/api/airtable', async (req, res) => {
     try {
         const { email, story } = req.body;
+        console.log('Received data:', { email, story });
+
         let record;
+        let fields = {};
 
         if (email) {
-            // Handle email submission
-            record = await base('Emails').create({
-                "Emails": email
-            });
-            console.log('Email record created:', record);
-        } else if (story) {
-            // Handle story submission
-            record = await base('Emails').create({
-                "story": story
-            });
-            console.log('Story record created:', record);
-        } else {
+            fields.Emails = email;
+        }
+        if (story) {
+            fields.story = story;
+        }
+
+        if (Object.keys(fields).length === 0) {
             throw new Error('Invalid submission: neither email nor story provided');
         }
+
+        console.log('Attempting to create record with:', fields);
+        record = await base('Emails').create(fields);
+        console.log('Record created:', record);
 
         res.json({ message: 'Success', id: record.id });
     } catch (error) {
