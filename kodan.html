@@ -168,167 +168,174 @@
             const emailSubmit = document.getElementById('email-submit');
             const newStoryLink = document.getElementById('new-story');
 
+
             let storedStory;
-
+    let isSubmitting = false;
             function fadeIn(element, duration = 1000) {
-    element.style.display = 'block';  // Add this line
-    setTimeout(() => {
+        element.style.display = 'block';
+        setTimeout(() => {
+            element.style.transition = `opacity ${duration}ms ease`;
+            element.style.opacity = '1';
+        }, 100);
+    }
+
+    function fadeOut(element, duration = 1000) {
         element.style.transition = `opacity ${duration}ms ease`;
-        element.style.opacity = '1';
-    }, 100);
-}
+        element.style.opacity = '0';
+    }
 
-            function fadeOut(element, duration = 1000) {
-                element.style.transition = `opacity ${duration}ms ease`;
-                element.style.opacity = '0';
-            }
+    function switchToEmailInput() {
+        fadeOut(storyForm);
+        fadeOut(mainHeading);
+        fadeOut(logo);
 
-            function switchToEmailInput() {
-                fadeOut(storyForm);
+        setTimeout(() => {
+            body.style.backgroundColor = '#827EE4';
+            mainHeading.textContent = "what's your email?";
+            mainHeading.style.color = '#FFFFFF';
+            storyForm.style.display = 'none';
+            emailForm.style.display = 'flex';
+            logo.style.display = 'none';
+            logoWhite.style.display = 'block';
+            
+            fadeIn(mainHeading, 7000);
+            fadeIn(emailForm, 7000);
+            fadeIn(logoWhite, 7000);
+        }, 1000);
+    }
+
+    function validateEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    function shakeElement(element) {
+        element.classList.add('shake');
+        setTimeout(() => {
+            element.classList.remove('shake');
+        }, 500);
+    }
+
+    function submitStory() {
+        storedStory = storyInput.value;
+        switchToEmailInput();
+    }
+
+    function submitEmail() {
+        if (isSubmitting) return;
+
+        const email = emailInput.value;
+
+        if (!validateEmail(email)) {
+            shakeElement(emailInput);
+            return;
+        }
+
+        isSubmitting = true;
+
+        fetch('/api/airtable', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, story: storedStory }),
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.message === 'Success') {
+                fadeOut(emailForm);
                 fadeOut(mainHeading);
-                fadeOut(logo);
-
-                setTimeout(() => {
-                    body.style.backgroundColor = '#827EE4';
-                    mainHeading.textContent = "what's your email?";
-                    mainHeading.style.color = '#FFFFFF';
-                    storyForm.style.display = 'none';
-                    emailForm.style.display = 'flex';
-                    logo.style.display = 'none';
-                    logoWhite.style.display = 'block';
-                    
-                    fadeIn(mainHeading, 7000);
-                    fadeIn(emailForm, 7000);
-                    fadeIn(logoWhite, 7000);
-                }, 1000);
-            }
-
-            function validateEmail(email) {
-                const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return re.test(String(email).toLowerCase());
-            }
-
-            function shakeElement(element) {
-                element.classList.add('shake');
-                setTimeout(() => {
-                    element.classList.remove('shake');
-                }, 500);
-            }
-
-            function submitStory() {
-                storedStory = storyInput.value;
-                switchToEmailInput();
-            }
-
-            function submitEmail() {
-                const email = emailInput.value;
-
-                if (!validateEmail(email)) {
-                    shakeElement(emailInput);
-                    return;
-                }
-
-                fetch('/api/airtable', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ email, story: storedStory }),
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.message === 'Success') {
-                        fadeOut(emailForm);
-                        fadeOut(mainHeading);
-                        fadeOut(logoWhite);
-
-                        setTimeout(() => {
-                            fadeIn(thankYou, 1000);
-                            setTimeout(() => {
-                                fadeIn(options, 1000);
-                            }, 2000);
-                        }, 1000);
-                    } else {
-                        throw new Error(result.error || 'Failed to submit data');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Failed to submit data. ' + error.message);
-                });
-            }
-
-            function resetToStoryInput() {
-                fadeOut(thankYou);
-                fadeOut(options);
                 fadeOut(logoWhite);
 
                 setTimeout(() => {
-                    body.style.backgroundColor = '#FFFFFF';
-                    mainHeading.textContent = "what's your story?";
-                    mainHeading.style.color = '#827EE4';
-                    emailForm.style.display = 'none';
-                    storyForm.style.display = 'flex';
-                    logoWhite.style.display = 'none';
-                    logo.style.display = 'block';
-                    storyInput.value = '';
-                    
-                    fadeIn(mainHeading, 1000);
-                    fadeIn(storyForm, 1000);
-                    fadeIn(logo, 1000);
+                    fadeIn(thankYou, 1000);
+                    setTimeout(() => {
+                        fadeIn(options, 1000);
+                        isSubmitting = false;
+                    }, 2000);
                 }, 1000);
+            } else {
+                throw new Error(result.error || 'Failed to submit data');
             }
-
-            // Initial setup
-            setTimeout(() => {
-                body.style.backgroundColor = '#FFFFFF';
-                storyInput.style.color = '#827EE4';
-                storyInput.style.borderColor = '#827EE4';
-                storyInput.style.setProperty('--placeholder-color', '#A6A3F1');
-                fadeIn(logo);
-                fadeIn(storyForm);
-                fadeIn(mainHeading);
-            }, 100);
-
-            storyForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitStory();
-            });
-
-            emailForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                submitEmail();
-            });
-
-            storyInput.addEventListener('input', function() {
-                storySubmit.style.opacity = this.value.length > 0 ? '1' : '0';
-                storySubmit.style.color = '#827EE4';  // Always keep it purple
-            });
-
-            emailInput.addEventListener('input', function() {
-                emailSubmit.style.opacity = this.value.length > 0 ? '1' : '0';
-                emailSubmit.style.color = '#FFFFFF';  // Always keep it white
-            });
-
-            storyInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    submitStory();
-                }
-            });
-
-            emailInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    submitEmail();
-                }
-            });
-
-            newStoryLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                resetToStoryInput();
-            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to submit data. ' + error.message);
+            isSubmitting = false;
         });
+    }
+
+    function resetToStoryInput() {
+        fadeOut(thankYou);
+        fadeOut(options);
+        fadeOut(logoWhite);
+
+        setTimeout(() => {
+            body.style.backgroundColor = '#FFFFFF';
+            mainHeading.textContent = "what's your story?";
+            mainHeading.style.color = '#827EE4';
+            emailForm.style.display = 'none';
+            storyForm.style.display = 'flex';
+            logoWhite.style.display = 'none';
+            logo.style.display = 'block';
+            storyInput.value = '';
+            
+            fadeIn(mainHeading, 1000);
+            fadeIn(storyForm, 1000);
+            fadeIn(logo, 1000);
+        }, 1000);
+    }
+
+    // Initial setup
+    setTimeout(() => {
+        body.style.backgroundColor = '#FFFFFF';
+        storyInput.style.color = '#827EE4';
+        storyInput.style.borderColor = '#827EE4';
+        storyInput.style.setProperty('--placeholder-color', '#A6A3F1');
+        fadeIn(logo);
+        fadeIn(storyForm);
+        fadeIn(mainHeading);
+    }, 100);
+
+    storyForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitStory();
+    });
+
+    emailForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitEmail();
+    });
+
+    storyInput.addEventListener('input', function() {
+        storySubmit.style.opacity = this.value.length > 0 ? '1' : '0';
+        storySubmit.style.color = '#827EE4';  // Always keep it purple
+    });
+
+    emailInput.addEventListener('input', function() {
+        emailSubmit.style.opacity = this.value.length > 0 ? '1' : '0';
+        emailSubmit.style.color = '#FFFFFF';  // Always keep it white
+    });
+
+    storyInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            submitStory();
+        }
+    });
+
+    emailInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            submitEmail();
+        }
+    });
+
+    newStoryLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        resetToStoryInput();
+    });
+});
     </script>
 </body>
 </html>
